@@ -1,0 +1,31 @@
+{% load i18n %}{% autoescape off %}
+<html>
+  <body>
+    {% if not without_usernames %}<p>{% blocktrans with user.username as username %}Dear {{ username }},{% endblocktrans %}</p>{% endif %}
+    <p>
+      {% blocktrans with site.name as site %}There was a request to change your email address at {{ site }}.{% endblocktrans %}
+    </p>
+
+    <p>
+      {% blocktrans %}An email has been send to {{ new_email }} which contains a verification link. Click on the link in this email to activate it.{% endblocktrans %}
+    </p>
+
+    <p>{% trans "Thanks for using our site!" %}</p>
+
+    <p>
+      {% trans "Sincerely" %},<br />
+      {{ site.name }}
+    </p>
+  <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-47949262-1', 'nimstreet.com');
+      ga('send', 'pageview');
+
+    </script>
+</body>    
+</html>
+{% endautoescape %}

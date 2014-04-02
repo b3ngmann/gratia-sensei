@@ -1,0 +1,111 @@
+{% extends 'trucfund/profile.html' %}
+{% load apptags %}
+{% load humanize %}
+<!-- {% load i18n %} -->
+<!-- {% load url from future %} -->
+{% block project_navigation %}
+    <li class="create-nav-label">
+      <a  href="/profile/{{profile.user.username}}/backed" class="btn btn-nim zero" data-create-step="0">
+        <h4>Backed projects
+          <i class="fa fa-angle-right text-muted"></i>
+        </h4>
+      </a>
+    </li>
+    <li>
+      <a  class="btn btn-nim one active" data-create-step="1" href="/profile/{{ profile.user.username}}/created">
+        <h4>Created projects
+          <i class="fa fa-angle-right text-muted"></i>
+        </h4>
+      </a>
+    </li>
+    <li>
+      <a  class="btn btn-nim two" data-create-step="2" href="#">
+        <h4>Favorite projects
+          <i class="fa fa-angle-right text-muted"></i>
+        </h4>
+      </a>
+    </li>
+    <li>
+      <a  class="btn btn-nim three" data-create-step="3" href="#">
+        <h4>Comments
+          <i class="fa fa-angle-right text-muted"></i>
+        </h4>
+      </a>
+    </li>
+{% endblock %}
+
+{% block profile_navigation_items %}
+<!-- <li>
+  <a  class="btn btn-nim four active" data-create-step="4" href="{% url 'userena_profile_detail' user.username %}">
+    <h4>
+      View profile
+      <i class="fa fa-angle-right text-muted"></i>
+    </h4>
+  </a>
+</li> -->
+<li>
+  <a  class="btn btn-nim five" data-create-step="5" href="{% url 'userena_profile_edit' user.username %}">
+    <h4>
+      Edit details
+      <i class="fa fa-angle-right text-muted"></i>
+    </h4>
+  </a>
+</li>
+<li>
+  <a  class="btn btn-nim six" data-create-step="6" href="{% url 'userena_password_change' user.username %}">
+    <h4>
+      Change password
+      <i class="fa fa-angle-right text-muted"></i>
+    </h4>
+  </a>
+</li>
+<li>
+  <a  class="btn btn-nim seven" data-create-step="7" href="{% url 'userena_email_change' user.username %}">
+    <h4>
+       Change email
+      <i class="fa fa-angle-right text-muted"></i>
+    </h4>
+  </a>
+</li>
+{% endblock %}
+{% block title %}{% blocktrans with profile.user.username as username %}{{ username }}'s profile.{% endblocktrans %}{% endblock %}
+
+{% block content%}
+    <a class="btn btn-default" id="0">
+      <h4>{{profile.project_set.all.count}}</h4>
+    </a>  
+    <div class="row profile-row">
+      <ul class="thumbnails list-unstyled">
+      {% for project in profile.project_set.all %}
+      <li class="col-sm-4 col-lg-3">
+        <div class="thumbnail" style="padding: 0; border-radius: none;">
+          <div>
+            <a href="/project/{{ project.profile.user.username}}/{{ project.slug }}" class="thumbnail" style="padding:0; border-radius: none;">
+              {% if project.image.url != None %}
+              <img data-src="../js/holder.js/260x180" alt="260x180" style="width: 260px; height: 180px;" src="{{ project.image.url }}">
+              {% else %}
+              <img src="http://placehold.it/260x180&text=You need to upload a picture" style="width: 100%; height: 180px;" alt="">
+              {% endif %}
+            </a>
+          </div>
+          <div class="caption">
+            <a href="/project/{{ project.profile.user.username }}/{{ project.slug }}"><h6 class="project-name">{{ project.name.title|ellipses:22 }}</h6></a>
+            <span class="creator-name text-muted" style="font-size: 13px;">by {{project.profile.user.get_full_name.title}}</span class="creator-name">
+          </div>
+          <div class="progress" style="border-radius: 0; height:3px;margin-bottom:0px;">
+            <div class="progress-bar {{ project|progress_class }}" role="progressbar" data-percent="{% widthratio project|amount_raised  project.goal 100 %}" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: {% widthratio project|amount_raised  project.goal 100 %}%;">
+            </div>
+          </div>
+          <div class="modal-footer" style="text-align: left; padding: 0px 10px 10px 10px;margin-top: 0px;">
+            <div class="row">
+                <div class="col-md-6"><span class="pull-left"><small>{{ project.end_date|days_more }}</small></span></div>                
+                <div class="col-md-6"><span class="pull-right"><small>{{ project|currency }}{{ project|amount_left|intcomma  }}</small></span></div>           
+            </div>
+          </div>
+        </div>
+      </li>
+      {% endfor %}
+      </ul>
+    </div>
+  </div>  
+{% endblock %} 

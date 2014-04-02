@@ -1,0 +1,64 @@
+{% extends 'userena_base.html' %}
+{% load i18n %}
+{% load url from future %}
+
+{% block title %}{% trans "Signin" %}{% endblock %}
+{% block content %}
+<style>
+    #sign-in-container{
+        margin-top: 8%;
+        background-color: rgba(245,245,245,.5);
+    }
+    #forgot-password {
+        margin-top: 10px;
+        text-align: right;
+    }
+    .row.signup {
+        width: 99%; 
+    }
+    .social-panel.row {
+        width: 99%;
+    }
+</style>
+<div class="well col-md-offset-4 col-md-4" id="sign-in-container">
+    <div class="text-center">
+        <a href="/"><img src="/static/trucfund/scripts/images/nim-street-logo.png" alt="Nim Street Logo" style="height: 150px; margin: -10px 0 10px 0;"></a>
+    </div>
+    <form action="" method="post" accept-charset="UTF-8" role="form">
+        {% csrf_token %}
+        <fieldset>
+            {{ form.non_field_errors }}
+            {% for field in form %}
+            {% if field.name == 'identification'%}
+            <div class="form-group">
+                {{field.errors}}
+                <input id="id_identification" class="form-control" required="true" placeholder="Email or username" name="identification" type="text">
+            </div>
+            {% elif field.name == 'password' %}
+            <div class="form-group" id="password-form-group">
+                {{field.errors}}
+                <input id="id_password" class="form-control" required="true" placeholder="Password" id="" name="password" type="password">
+            </div>
+            {% elif field.name == 'remember_me' %}
+            <div class="col-md-6 checkbox">
+                {{field.errors}}
+                <input id="id_remember_me" name="remember_me" type="checkbox" value="Remember Me"><small>Remember me</small>
+            </div>
+            {% endif %}
+            {% endfor %}
+            <div class="col-md-6 pull-right" id="forgot-password">
+                <a href="/accounts/password/reset/" title="Forgot your password?"><small>Forgot your password?</small></a>        
+            </div>   
+        </fieldset>
+        <div class="row signup">
+            <button type="submit" class="btn-block btn btn-success default btn-lg" value="Signin">Signin</button>
+        </div>
+        <div class="row social">
+            {% with redirect_url=request.GET.next %}
+            {% include "social_auth.html" %}
+            {% endwith %}
+        </div>
+        <p class="create-new-account text-center"><a href="/signup/" title="signup">Create a new account / Sign Up</a></p>      
+    </form>
+</div>  
+{% endblock %}
